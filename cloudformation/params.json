@@ -1,0 +1,8 @@
+[
+  { "ParameterKey": "JarS3Bucket", "ParameterValue": "btgpactual2" },
+  { "ParameterKey": "JarS3Key", "ParameterValue": "btgpactual/app.jar" },
+  { "ParameterKey": "MongoDbUri", "ParameterValue": "mongodb+srv://admin:toor@cluster0.hcxpy.mongodb.net/btgpactual" },
+  { "ParameterKey": "SolutionStack", "ParameterValue": "64bit Amazon Linux 2 v3.12.0 running Corretto 17" },
+  { "ParameterKey": "VpcId", "ParameterValue": "vpc-0d16aeaf4ab9709de" },
+  { "ParameterKey": "SubnetIds", "ParameterValue": "subnet-04dacc0adae9ec6bc" }
+]

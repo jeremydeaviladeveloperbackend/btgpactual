@@ -1,0 +1,123 @@
+{
+  "clients": {
+    "descripcion": "Clientes con saldo y preferencia de notificación",
+    "campos": {
+      "clientId": "String - identificador de negocio (único)",
+      "nombre": "String",
+      "apellidos": "String",
+      "ciudad": "String",
+      "saldo": "NumberDecimal - saldo en COP (inicial 500000)",
+      "preferenciaNotificacion": "String - EMAIL | SMS"
+    },
+    "indices": [
+      {
+        "keys": {
+          "clientId": 1
+        },
+        "options": {
+          "unique": true
+        }
+      }
+    ]
+  },
+  "funds": {
+    "descripcion": "Catálogo de fondos disponibles",
+    "campos": {
+      "fundId": "String - identificador de negocio (1, 2, 3...)",
+      "nombre": "String",
+      "montoMinimo": "NumberDecimal - monto mínimo en COP",
+      "categoria": "String - FPV | FIC"
+    },
+    "indices": [
+      {
+        "keys": {
+          "fundId": 1
+        },
+        "options": {
+          "unique": true
+        }
+      }
+    ],
+    "datosIniciales": [
+      {
+        "fundId": "1",
+        "nombre": "FPV_BTG_PACTUAL_RECAUDADORA",
+        "montoMinimo": 75000,
+        "categoria": "FPV"
+      },
+      {
+        "fundId": "2",
+        "nombre": "FPV_BTG_PACTUAL_ECOPETROL",
+        "montoMinimo": 125000,
+        "categoria": "FPV"
+      },
+      {
+        "fundId": "3",
+        "nombre": "DEUDAPRIVADA",
+        "montoMinimo": 50000,
+        "categoria": "FIC"
+      },
+      {
+        "fundId": "4",
+        "nombre": "FDO-ACCIONES",
+        "montoMinimo": 250000,
+        "categoria": "FIC"
+      },
+      {
+        "fundId": "5",
+        "nombre": "FPV_BTG_PACTUAL_DINAMICA",
+        "montoMinimo": 100000,
+        "categoria": "FPV"
+      }
+    ]
+  },
+  "subscriptions": {
+    "descripcion": "Suscripciones activas de clientes a fondos",
+    "campos": {
+      "clientId": "String",
+      "fundId": "String",
+      "montoVinculado": "NumberDecimal",
+      "fechaApertura": "Date"
+    },
+    "indices": [
+      {
+        "keys": {
+          "clientId": 1,
+          "fundId": 1
+        },
+        "options": {
+          "unique": true
+        }
+      }
+    ]
+  },
+  "transactions": {
+    "descripcion": "Historial de transacciones (aperturas y cancelaciones)",
+    "campos": {
+      "transactionId": "String - UUID único",
+      "clientId": "String",
+      "fundId": "String",
+      "subscriptionId": "String",
+      "tipo": "String - APERTURA | CANCELACION",
+      "monto": "NumberDecimal",
+      "fecha": "Date"
+    },
+    "indices": [
+      {
+        "keys": {
+          "transactionId": 1
+        },
+        "options": {
+          "unique": true
+        }
+      },
+      {
+        "keys": {
+          "clientId": 1,
+          "fecha": -1
+        },
+        "options": {}
+      }
+    ]
+  }
+}

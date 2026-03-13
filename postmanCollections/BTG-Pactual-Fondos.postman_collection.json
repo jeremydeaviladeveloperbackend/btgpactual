@@ -1,0 +1,184 @@
+{
+  "info": {
+    "name": "BTG Pactual - API Fondos",
+    "description": "Colección para la API REST de fondos de inversión",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "clientId",
+      "value": ""
+    },
+    {
+      "key": "subscriptionId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Crear cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan\",\n  \"apellidos\": \"Pérez García\",\n  \"ciudad\": \"Bogotá\",\n  \"preferenciaNotificacion\": \"EMAIL\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients"]
+            },
+            "description": "Crea un cliente con saldo inicial de COP 500.000",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "if (pm.response.code === 201) {",
+                    "    const json = pm.response.json();",
+                    "    if (json.clientId) {",
+                    "        pm.collectionVariables.set('clientId', json.clientId);",
+                    "    }",
+                    "}"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Obtener cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients/{{clientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients", "{{clientId}}"]
+            },
+            "description": "Obtiene un cliente por su clientId"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fondos",
+      "item": [
+        {
+          "name": "Listar fondos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/funds",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "funds"]
+            },
+            "description": "Lista todos los fondos disponibles con su monto mínimo"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Suscripciones",
+      "item": [
+        {
+          "name": "Suscribirse a fondo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fundId\": \"1\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients/{{clientId}}/subscriptions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients", "{{clientId}}", "subscriptions"]
+            },
+            "description": "Suscribe al cliente a un fondo. fundId: 1-5 según catálogo",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "if (pm.response.code === 201) {",
+                    "    const json = pm.response.json();",
+                    "    if (json.id) {",
+                    "        pm.collectionVariables.set('subscriptionId', json.id);",
+                    "    }",
+                    "}"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Listar suscripciones activas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients/{{clientId}}/subscriptions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients", "{{clientId}}", "subscriptions"]
+            },
+            "description": "Lista las suscripciones activas del cliente"
+          }
+        },
+        {
+          "name": "Cancelar suscripción",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients/{{clientId}}/subscriptions/{{subscriptionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients", "{{clientId}}", "subscriptions", "{{subscriptionId}}"]
+            },
+            "description": "Cancela una suscripción. El monto se devuelve al cliente"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transacciones",
+      "item": [
+        {
+          "name": "Historial de transacciones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients/{{clientId}}/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients", "{{clientId}}", "transactions"]
+            },
+            "description": "Obtiene el historial de aperturas y cancelaciones del cliente"
+          }
+        }
+      ]
+    }
+  ]
+}

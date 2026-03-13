@@ -1,24 +1,61 @@
-# Compiled class file
+# Build
+build/
+.gradle/
+.gradletasknamecache
+gradle-app.setting
+
+# Gradle wrapper (keep the jar)
+!gradle/wrapper/gradle-wrapper.jar
+
+# Java
 *.class
-
-# Log file
 *.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
 *.war
 *.nar
 *.ear
+*.jar
+!gradle-wrapper.jar
+hs_err_pid*
+
+# Archives
 *.zip
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# IDEs
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+.nb-gradle/
+.vscode/
+
+# IntelliJ
+.idea/**/workspace.xml
+.idea/**/dataSources/
+.idea/**/gradle.xml
+.idea/**/libraries
+
+# OS
+.DS_Store
+
+# Sonar
+.sonar/
+.scannerwork/
+
+# Local config (no commitear credenciales)
+application-local.properties
+application-local.yml
+*.local

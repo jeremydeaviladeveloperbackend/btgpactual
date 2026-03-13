@@ -1,0 +1,122 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'BTG Pactual - Despliegue backend fondos (simple)'
+
+Parameters:
+  ApplicationName:
+    Type: String
+    Default: btgpactual-backend
+    Description: Nombre de la aplicación
+  EnvironmentName:
+    Type: String
+    Default: prod
+    Description: Nombre del ambiente (prod, staging, etc)
+  JarS3Bucket:
+    Type: String
+    Description: Bucket S3 donde está el JAR (ej. mi-bucket-deployments)
+  JarS3Key:
+    Type: String
+    Description: Ruta del JAR en S3 (ej. btgpactual/app-0.0.1-SNAPSHOT.jar)
+  MongoDbUri:
+    Type: String
+    NoEcho: true
+    Description: Connection string de MongoDB Atlas
+  SolutionStack:
+    Type: String
+    Default: '64bit Amazon Linux 2 v3.12.0 running Corretto 17'
+    Description: "Solution stack (ejecute: aws elasticbeanstalk list-available-solution-stacks)"
+  VpcId:
+    Type: String
+    Description: VPC donde se desplegará el ambiente de EB
+  SubnetIds:
+    Type: CommaDelimitedList
+    Description: Subnets para el ambiente (puede ser una sola)
+
+Resources:
+  Application:
+    Type: AWS::ElasticBeanstalk::Application
+
+    Properties:
+      ApplicationName: !Ref ApplicationName
+      Description: API REST fondos de inversión BTG Pactual
+
+  ApplicationVersion:
+    Type: AWS::ElasticBeanstalk::ApplicationVersion
+    DependsOn: Application
+
+    Properties:
+      ApplicationName: !Ref ApplicationName
+      Description: Versión inicial
+      SourceBundle:
+        S3Bucket: !Ref JarS3Bucket
+        S3Key: !Ref JarS3Key
+
+  Environment:
+    Type: AWS::ElasticBeanstalk::Environment
+    DependsOn: ApplicationVersion
+
+    Properties:
+      ApplicationName: !Ref ApplicationName
+      EnvironmentName: !Sub '${EnvironmentName}'
+      SolutionStackName: !Ref SolutionStack
+      VersionLabel: !Ref ApplicationVersion
+      OptionSettings:
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: MONGODB_URI
+          Value: !Ref MongoDbUri
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: PORT
+          Value: "5000"
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: IamInstanceProfile
+          Value: !Ref InstanceProfile
+        - Namespace: aws:elasticbeanstalk:environment
+          OptionName: EnvironmentType
+          Value: SingleInstance
+        - Namespace: aws:elasticbeanstalk:environment
+          OptionName: ServiceRole
+          Value: !Ref ServiceRole
+        - Namespace: aws:ec2:vpc
+          OptionName: VPCId
+          Value: !Ref VpcId
+        - Namespace: aws:ec2:vpc
+          OptionName: Subnets
+          Value: !Join [ ",", !Ref SubnetIds ]
+          
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref InstanceRole
+      InstanceProfileName: !Sub '${ApplicationName}-instance-profile'
+
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker
+
+  ServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: elasticbeanstalk.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkEnhancedHealth
+Outputs:
+  EnvironmentId:
+    Value: !Ref Environment
+    Export:
+      Name: !Sub '${AWS::StackName}-EnvId'
