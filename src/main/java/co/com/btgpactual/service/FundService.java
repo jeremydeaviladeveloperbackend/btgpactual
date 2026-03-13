@@ -17,6 +17,10 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Service for fund subscription operations.
+ * Orchestrates validation, balance updates, transaction recording and notifications.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,14 @@ public class FundService {
     private final TransactionRepository transactionRepository;
     private final NotificationService notificationService;
 
+    /**
+     * Subscribes a client to a fund. Validates client and fund exist, sufficient balance,
+     * and no duplicate subscription. Deducts minimum amount and notifies client.
+     *
+     * @param clientId client identifier
+     * @param request  subscription request containing fundId
+     * @return the created subscription
+     */
     public Mono<SubscriptionResponse> subscribe(String clientId, SubscribeRequest request) {
         return validateClientExists(clientId)
                 .flatMap(client -> validateFundExists(request.getFundId())
@@ -36,6 +48,14 @@ public class FundService {
                                 .flatMap(c -> processSubscription(c, fund))));
     }
 
+    /**
+     * Cancels a subscription. Returns the linked amount to client balance,
+     * removes the subscription and records the transaction.
+     *
+     * @param clientId       client identifier
+     * @param subscriptionId subscription to cancel
+     * @return the cancelled subscription details
+     */
     public Mono<SubscriptionResponse> cancelSubscription(String clientId, String subscriptionId) {
         return validateClientExists(clientId)
                 .flatMap(client -> subscriptionRepository.findByIdAndClientId(subscriptionId, clientId)
@@ -44,6 +64,12 @@ public class FundService {
                                 .flatMap(fund -> processCancellation(client, subscription, fund))));
     }
 
+    /**
+     * Returns all active subscriptions for a client.
+     *
+     * @param clientId client identifier
+     * @return flux of subscriptions with fund details
+     */
     public Flux<SubscriptionResponse> getActiveSubscriptions(String clientId) {
         return validateClientExists(clientId)
                 .thenMany(subscriptionRepository.findByClientId(clientId))
@@ -52,6 +78,12 @@ public class FundService {
                         .defaultIfEmpty(toResponse(sub, sub.getFundId(), "N/A")));
     }
 
+    /**
+     * Retrieves transaction history for a client, ordered by date descending.
+     *
+     * @param clientId client identifier
+     * @return flux of transactions (openings and cancellations)
+     */
     public Flux<TransactionResponse> getTransactionHistory(String clientId) {
         return validateClientExists(clientId)
                 .thenMany(transactionRepository.findByClientIdOrderByFechaDesc(clientId))

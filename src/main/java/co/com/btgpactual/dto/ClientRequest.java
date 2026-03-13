@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Request body for creating a new client.
+ */
 @Data
 @Builder
 public class ClientRequest {

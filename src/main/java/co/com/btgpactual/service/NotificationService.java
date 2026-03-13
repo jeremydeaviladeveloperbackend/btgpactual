@@ -16,6 +16,15 @@ import reactor.core.publisher.Mono;
 @Service
 public class NotificationService {
 
+    /**
+     * Sends a subscription notification (email or SMS) based on client preference.
+     * Currently simulated via logging.
+     *
+     * @param client       the client who subscribed
+     * @param fund         the fund subscribed to
+     * @param subscription the created subscription
+     * @return Mono completing when notification is sent
+     */
     public Mono<Void> notifySubscription(Client client, Fund fund, Subscription subscription) {
         return Mono.fromRunnable(() -> {
             if (client.getPreferenciaNotificacion() == NotificationPreference.EMAIL) {

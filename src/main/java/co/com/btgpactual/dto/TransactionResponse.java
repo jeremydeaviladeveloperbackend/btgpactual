@@ -7,6 +7,9 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+/**
+ * Response payload for transaction history entries.
+ */
 @Data
 @Builder
 public class TransactionResponse {

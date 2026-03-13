@@ -12,6 +12,10 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+/**
+ * Service for client management.
+ * Handles client creation with initial balance and retrieval by identifier.
+ */
 @Service
 @RequiredArgsConstructor
 public class ClientService {
@@ -20,6 +24,12 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
 
+    /**
+     * Creates a new client with initial balance and generates a unique clientId.
+     *
+     * @param request client data
+     * @return the created client
+     */
     public Mono<ClientResponse> createClient(ClientRequest request) {
         String clientId = UUID.randomUUID().toString();
         Client client = Client.builder()
@@ -34,6 +44,12 @@ public class ClientService {
                 .map(this::toResponse);
     }
 
+    /**
+     * Retrieves a client by its unique identifier.
+     *
+     * @param clientId unique client identifier
+     * @return the client if found, empty Mono otherwise
+     */
     public Mono<ClientResponse> getByClientId(String clientId) {
         return clientRepository.findByClientId(clientId)
                 .map(this::toResponse);

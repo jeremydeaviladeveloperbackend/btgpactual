@@ -11,6 +11,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+/**
+ * MongoDB document representing a subscription transaction (opening or cancellation).
+ */
 @Data
 @Builder
 @NoArgsConstructor

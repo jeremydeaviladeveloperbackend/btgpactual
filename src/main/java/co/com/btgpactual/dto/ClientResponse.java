@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
+/**
+ * Response payload for client data returned by the API.
+ */
 @Data
 @Builder
 public class ClientResponse {

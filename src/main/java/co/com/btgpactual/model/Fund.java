@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 
+/**
+ * MongoDB document representing an investment fund (FPV, FIC).
+ */
 @Data
 @Builder
 @NoArgsConstructor

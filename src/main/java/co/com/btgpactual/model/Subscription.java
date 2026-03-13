@@ -11,6 +11,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+/**
+ * MongoDB document representing a client's subscription to a fund.
+ * One client can only have one active subscription per fund (unique compound index).
+ */
 @Data
 @Builder
 @NoArgsConstructor

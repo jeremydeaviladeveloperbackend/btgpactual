@@ -9,6 +9,10 @@ import reactor.core.publisher.Flux;
 
 import java.util.Map;
 
+/**
+ * REST controller for fund listing.
+ * Exposes available investment funds with their basic information.
+ */
 @RestController
 @RequestMapping("/api/v1/funds")
 @RequiredArgsConstructor
@@ -16,6 +20,11 @@ public class FundController {
 
     private final FundRepository fundRepository;
 
+    /**
+     * Lists all available investment funds.
+     *
+     * @return flux of funds with fundId, nombre, montoMinimo and categoria
+     */
     @GetMapping
     public Flux<Map<String, Object>> listFunds() {
         return fundRepository.findAll()

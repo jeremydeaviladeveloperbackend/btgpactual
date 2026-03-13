@@ -1,5 +1,9 @@
 package co.com.btgpactual.exception;
 
+/**
+ * Exception for business rule violations (e.g. insufficient balance, duplicate subscription).
+ * Maps to HTTP 400 Bad Request.
+ */
 public class BusinessException extends RuntimeException {
 
     private final String code;

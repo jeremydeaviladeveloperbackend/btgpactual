@@ -6,6 +6,9 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+/**
+ * Response payload for subscription data returned by the API.
+ */
 @Data
 @Builder
 public class SubscriptionResponse {

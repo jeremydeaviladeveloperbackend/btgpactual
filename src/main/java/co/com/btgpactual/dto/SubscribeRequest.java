@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Request body for subscribing a client to a fund.
+ */
 @Data
 @Builder
 public class SubscribeRequest {

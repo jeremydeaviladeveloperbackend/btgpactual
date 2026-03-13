@@ -13,6 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Central exception handler for REST controllers.
+ * Converts exceptions to appropriate HTTP status codes and error bodies.
+ */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
