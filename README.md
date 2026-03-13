@@ -12,19 +12,23 @@ API REST reactiva de fondos de inversión (Spring WebFlux + MongoDB).
 
 **Requisitos:** Java 17, MongoDB (local o Atlas).
 
-**Comandos:**
+**Arranque local (sin exponer credenciales en variables de entorno):**
+
+1. Copiar `src/main/resources/application-local.properties.example` → `application-local.properties` (en la misma carpeta).
+2. Editar `application-local.properties` y poner tu URI de MongoDB Atlas.
+3. Ejecutar con perfil `local`:
 
 ```bash
 # Linux / macOS
-./gradlew bootRun
+./gradlew bootRun --args='--spring.profiles.active=local'
 
 # Windows
-.\gradlew.bat bootRun
+.\gradlew.bat bootRun --args="--spring.profiles.active=local"
 ```
 
-**Variables de entorno:**
+`application-local.properties` está en `.gitignore`; no se sube al repo.
 
-- `MONGODB_URI`: connection string de MongoDB (obligatorio en producción).
+**Alternativa:** definir `MONGODB_URI` en variable de entorno y ejecutar `./gradlew bootRun` (o `.\gradlew.bat bootRun` en Windows).
 
 **Puerto:** 5000 por defecto. Para usar otro: `-Dserver.port=8080`
 
